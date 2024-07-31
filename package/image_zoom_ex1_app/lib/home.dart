@@ -15,6 +15,7 @@ class _HomeState extends State<Home> {
   late bool _lampZoomSwitch;
   late bool _lampLightSwitch;
   late bool _lampColorSwitch;
+  late double _lampAngle;
 
   @override
   void initState() {
@@ -22,6 +23,7 @@ class _HomeState extends State<Home> {
     _imageName = 'images/lamp_on.png';
     _lampHeight = 300;
     _lampWidth = 150;
+    _lampAngle = 0;
     _lampZoomSwitch = false;
     _lampLightSwitch = true;
     _lampColorSwitch = false;
@@ -38,15 +40,18 @@ class _HomeState extends State<Home> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SizedBox(
-              width: 330,
-              height: 630,
+              width: 250,
+              height: 500,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Image.asset(
-                    _imageName,
-                    width: _lampWidth,
-                    height: _lampHeight,
+                  RotationTransition(
+                    turns: AlwaysStoppedAnimation(_lampAngle/360),
+                    child: Image.asset(
+                      _imageName,
+                      width: _lampWidth,
+                      height: _lampHeight,
+                    ),
                   ),
                 ],
               ),
@@ -106,7 +111,20 @@ class _HomeState extends State<Home> {
                   ],
                 ),
               ],
-            )
+            ),
+            Container(
+              color: Colors.amber,
+              width: 200,
+              child: Slider(
+                value: _lampAngle,
+                min: 0,
+                max: 360,
+                onChanged: (value) {
+                  _lampAngle = value;
+                  setState(() {});
+                },
+              ),
+            ),
           ],
         ),
       ),
@@ -115,8 +133,8 @@ class _HomeState extends State<Home> {
 
   changeLampSize(){
     if(_lampZoomSwitch){
-      _lampHeight = 600;
-      _lampWidth = 300;
+      _lampHeight = 500;
+      _lampWidth = 250;
     }else{
       _lampHeight = 300;
       _lampWidth = 150;
