@@ -51,14 +51,21 @@ class _HomeState extends State<Home> {
         itemCount: numList.length,
         itemBuilder: (context, index) {
           return SizedBox(
-            height: 100,
+            height: 65,
             child: Card(
-              color: Colors.amberAccent,
+              color: (index + 1) % 10 ==0 ? Colors.red : Colors.yellow,
               child: Center(
-                child: Text(
-                  // todoList[index],
-                  numList[index].toString(),
-                  style: const TextStyle(fontSize: 20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    (index + 1) % 2 == 0 ? const Icon(Icons.call) : const Icon(Icons.call_end),
+
+                    Text(
+                      // todoList[index],
+                      '번호:\n ${numList[index].toString()}',
+                      style: const TextStyle(fontSize: 20),
+                    ),
+                  ],
                 ),
               ),
             ),
