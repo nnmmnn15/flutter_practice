@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:tabbar_ex_app/view/pikachu1.dart';
 import 'package:tabbar_ex_app/view/pikachu2.dart';
 
@@ -42,6 +41,14 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin{
       bottomNavigationBar: SizedBox(
         height: 100,
         child: TabBar(
+
+          labelColor: Colors.red,
+          unselectedLabelColor: Colors.blue,
+          indicatorColor: Colors.green,
+
+          dividerColor: Colors.black,
+          overlayColor: WidgetStateProperty.all(Colors.grey[300]),
+          
           controller: tabController,
           indicatorWeight: 5,
           indicatorSize: TabBarIndicatorSize.values[1],
