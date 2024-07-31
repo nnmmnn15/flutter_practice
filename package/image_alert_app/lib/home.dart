@@ -12,6 +12,8 @@ class _HomeState extends State<Home> {
   late bool _lampState;
   late String _lampStateStr;
   late String _lampImage;
+
+  late String _lampChangeStrTitle;
   late String _lampChangeStr;
 
   @override
@@ -20,7 +22,8 @@ class _HomeState extends State<Home> {
     _lampState = true;
     _lampStateStr = '켜진';
     _lampImage = 'images/lamp_on.png';
-    _lampChangeStr = '끄';
+    _lampChangeStrTitle = '램프 끄기';
+    _lampChangeStr = '램프를 끄시겠습니까?';
   }
 
   @override
@@ -80,6 +83,7 @@ class _HomeState extends State<Home> {
       context: context,
       barrierDismissible: false,
       builder: (context) {
+        // 여기에 3항 연산 추가?
         return AlertDialog(
           backgroundColor: Colors.white,
           title: const Text('경고'),
@@ -104,8 +108,8 @@ class _HomeState extends State<Home> {
       builder: (context) {
         return AlertDialog(
           backgroundColor: Colors.white,
-          title: Text('램프 $_lampChangeStr기'),
-          content: Text('램프를 $_lampChangeStr시겠습니까?.'),
+          title: Text(_lampChangeStrTitle),
+          content: Text(_lampChangeStr),
           actions: [
             Center(
               child: Row(
@@ -133,12 +137,14 @@ class _HomeState extends State<Home> {
       _lampState = false;
       _lampStateStr = '꺼진';
       _lampImage = 'images/lamp_off.png';
-      _lampChangeStr = '꺼';
+      _lampChangeStrTitle = '램프 켜기';
+      _lampChangeStr = '램프를 켜시겠습니까?';
     }else{
       _lampState = true;
       _lampStateStr = '켜진';
       _lampImage = 'images/lamp_on.png';
-      _lampChangeStr = '끄';
+      _lampChangeStrTitle = '램프 끄기';
+      _lampChangeStr = '램프를 끄시겠습니까?';
     }
     Navigator.of(context).pop();
     setState(() {});
