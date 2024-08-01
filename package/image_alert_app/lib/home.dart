@@ -45,11 +45,11 @@ class _HomeState extends State<Home> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ElevatedButton(
-                  onPressed: () => onButton(),
+                  onPressed: () => clickBtn(true),//onButton(),
                   child: const Text('켜기'),
                 ),
                 ElevatedButton(
-                  onPressed: () => offButton(),
+                  onPressed: () => clickBtn(false),
                   child: const Text('끄기'),
                 ),
               ],
@@ -62,21 +62,29 @@ class _HomeState extends State<Home> {
 
 
   // --- function ---
-  onButton(){
-    if(_lampState){
+  clickBtn(bool state){
+    if(state == _lampState){
       showErrorDialog(context);
     }else{
       showChangeDialog(context);
     }
   }
 
-  offButton(){
-    if(!_lampState){
-      showErrorDialog(context);
-    }else{
-      showChangeDialog(context);
-    }
-  }
+  // onButton(){
+  //   if(_lampState){
+  //     showErrorDialog(context);
+  //   }else{
+  //     showChangeDialog(context);
+  //   }
+  // }
+
+  // offButton(){
+  //   if(!_lampState){
+  //     showErrorDialog(context);
+  //   }else{
+  //     showChangeDialog(context);
+  //   }
+  // }
 
   showErrorDialog(context){
     showDialog(
@@ -84,6 +92,7 @@ class _HomeState extends State<Home> {
       barrierDismissible: false,
       builder: (context) {
         // 여기에 3항 연산 추가?
+        // 조건 ? 
         return AlertDialog(
           backgroundColor: Colors.white,
           title: const Text('경고'),
@@ -102,6 +111,37 @@ class _HomeState extends State<Home> {
   }
 
   showChangeDialog(context){
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return AlertDialog(
+          backgroundColor: Colors.white,
+          title: Text(_lampChangeStrTitle),
+          content: Text(_lampChangeStr),
+          actions: [
+            Center(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextButton(
+                    onPressed: () => changeState(),
+                    child: const Text('네'),
+                  ),
+                  TextButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: const Text('아니요'),
+                  ),
+                ],
+              ),
+            )
+          ],
+        );
+      },
+    );
+  }
+
+  pushDialog(context){
     showDialog(
       context: context,
       barrierDismissible: false,

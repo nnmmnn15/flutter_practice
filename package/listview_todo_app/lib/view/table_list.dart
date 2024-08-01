@@ -49,31 +49,67 @@ class _TableListState extends State<TableList> {
         child: ListView.builder(
           itemCount: todoList.length,
           itemBuilder: (context, index) {
-            return GestureDetector(
-              onTap: () {
-                Message.workList = todoList[index].workList;
-                Message.imagePath = todoList[index].imagePath;
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const DetailList()
-                  ),
-                );
+            return Dismissible(
+              direction: DismissDirection.endToStart,
+              key: ValueKey(todoList[index]),
+              onDismissed: (direction) {
+                todoList.remove(todoList[index]);
+                setState(() {});
               },
-              child: Card(
-                color: index % 2 == 0 ? Colors.green : Colors.yellow,
-                child: Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Image.asset(
-                        todoList[index].imagePath
+              // background: Container(
+              //   color: Colors.red,
+              //   alignment: Alignment.centerRight,
+              //   child: const Padding(
+              //     padding: EdgeInsets.symmetric(horizontal: 10),
+              //     child: Row(
+              //       mainAxisAlignment: MainAxisAlignment.end,
+              //       children: [
+              //         Icon(
+              //           Icons.delete_forever,
+              //           size: 50,
+              //         ),
+              //       ],
+              //     ),
+              //   ),
+              // ),
+              background: Container(
+                color: Colors.red,
+                alignment: Alignment.centerRight,
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: Icon(
+                    Icons.delete_forever,
+                    size: 50,
+                  ),
+                ),
+              ),
+
+              child: GestureDetector(
+                onTap: () {
+                  Message.workList = todoList[index].workList;
+                  Message.imagePath = todoList[index].imagePath;
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const DetailList()
+                    ),
+                  );
+                },
+                child: Card(
+                  color: index % 2 == 0 ? Colors.green : Colors.yellow,
+                  child: Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Image.asset(
+                          todoList[index].imagePath,
+                        ),
                       ),
-                    ),
-                    Text(
-                      '   ${todoList[index].workList}',
-                    ),
-                  ],
+                      Text(
+                        '   ${todoList[index].workList}',
+                      ),
+                    ],
+                  ),
                 ),
               ),
             );

@@ -19,7 +19,12 @@ class _DetailListState extends State<DetailList> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset(Message.imagePath),
+            Image.asset(
+              Message.imagePath,
+              width: 100,
+              // height: 100,
+              // fit: BoxFit.fill,
+            ),
             Text(
               Message.workList,
             ),
