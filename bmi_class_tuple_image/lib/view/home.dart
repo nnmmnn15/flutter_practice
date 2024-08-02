@@ -1,5 +1,6 @@
 import 'package:bmi_class_tuple_image/vm/calc_bmi.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -9,7 +10,6 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-
   // Property
   late TextEditingController heightController;
   late TextEditingController weightController;
@@ -20,7 +20,7 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-    heightController = TextEditingController();
+    heightController = TextEditingController(text: '0');
     weightController = TextEditingController();
     calcResult = '';
     bmiImage = 'set.png';
@@ -35,17 +35,54 @@ class _HomeState extends State<Home> {
       ),
       body: Column(
         children: [
-          TextField(
-            controller: heightController,
-            decoration: const InputDecoration(
-              labelText: '신장을 입력하세요. (cm)'
-            ),
-          ),
-          TextField(
-            controller: weightController,
-            decoration: const InputDecoration(
-              labelText: '몸무게를 입력하세요. (kg)'
-            ),
+          Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    width: 30,
+                    child: IconButton(
+                      onPressed: () {
+                        heightController.text =
+                            (int.parse(heightController.text.trim()) - 1)
+                                .toString();
+                        setState(() {});
+                      },
+                      icon: const Icon(Icons.remove),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 180,
+                    child: TextField(
+                      controller: heightController,
+                      decoration:
+                          const InputDecoration(labelText: '신장을 입력하세요. (cm)'),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 30,
+                    child: IconButton(
+                      onPressed: () {
+                        heightController.text =
+                            (int.parse(heightController.text.trim()) + 1)
+                                .toString();
+                        setState(() {});
+                      },
+                      icon: const Icon(Icons.add),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                width: 180,
+                child: TextField(
+                  controller: weightController,
+                  decoration:
+                      const InputDecoration(labelText: '몸무게를 입력하세요. (kg)'),
+                ),
+              ),
+            ],
           ),
           Padding(
             padding: const EdgeInsets.all(20.0),
@@ -62,39 +99,54 @@ class _HomeState extends State<Home> {
               fontWeight: FontWeight.bold,
             ),
           ),
-          Stack(
-            children:[
-              Image.asset(
-                'images/$bmiImage',
+          Stack(children: [
+            Image.asset(
+              'images/$bmiImage',
+            ),
+            Positioned(
+              left: arrowPos,
+              child: const Icon(
+                Icons.arrow_downward,
+                size: 50,
               ),
-              Positioned(
-                left: arrowPos,
-                child: const Icon(
-                  Icons.arrow_downward,
-                  size: 50,
-                ),
-              ),
-            ]
-          ),
+            ),
+          ]),
         ],
       ),
     );
   }
 
-
-  calcFunction(){
-    if(heightController.text.trim().isEmpty || weightController.text.trim().isEmpty){
-      // errorSnackBar();
+  calcFunction() {
+    if (heightController.text.trim().isEmpty ||
+        weightController.text.trim().isEmpty) {
+      if (heightController.text.trim().isEmpty &&
+          weightController.text.trim().isNotEmpty) {
+        errorTopSnackBar("신장을 입력해주세요!");
+      } else if (heightController.text.trim().isNotEmpty &&
+          weightController.text.trim().isEmpty) {
+        errorTopSnackBar("몸무게를 입력해주세요!");
+      } else {
+        errorTopSnackBar("신장과 몸무게를 입력해주세요!");
+      }
+      // top snackbar
       arrowPos = -100;
       setState(() {});
-    }else{
-      CalcBMI calcBMI = CalcBMI(weightController.text.trim(), heightController.text.trim());
+    } else {
+      CalcBMI calcBMI =
+          CalcBMI(weightController.text.trim(), heightController.text.trim());
       (String, String, String, double) resultCalc = calcBMI.calcAction();
       calcResult = '귀하의 bmi지수는 ${resultCalc.$1}이고\n ${resultCalc.$2} 입니다.';
-      // bmiImage = resultCalc.$3;
       arrowPos = resultCalc.$4;
       setState(() {});
     }
-    
+  }
+
+  errorTopSnackBar(String errorMassage) {
+    Get.snackbar(
+      '입력 오류',
+      errorMassage,
+      backgroundColor: Colors.black54,
+      colorText: Colors.white,
+    );
   }
 }
