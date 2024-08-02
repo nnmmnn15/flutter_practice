@@ -10,20 +10,18 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
 
   late bool _lampState;
-  late String _lampStateStr;
   late String _lampImage;
 
-  late String _lampChangeStrTitle;
-  late String _lampChangeStr;
+  late String _lampStrTitle;
+  late String _lampStrMessage;
 
   @override
   void initState() {
     super.initState();
     _lampState = true;
-    _lampStateStr = '켜진';
     _lampImage = 'images/lamp_on.png';
-    _lampChangeStrTitle = '램프 끄기';
-    _lampChangeStr = '램프를 끄시겠습니까?';
+    _lampStrTitle = '램프 끄기';
+    _lampStrMessage = '램프를 끄시겠습니까?';
   }
 
   @override
@@ -63,107 +61,52 @@ class _HomeState extends State<Home> {
 
   // --- function ---
   clickBtn(bool state){
-    if(state == _lampState){
-      showErrorDialog(context);
+    if(state == _lampState){ // 변경 없음
+      _lampStrTitle = '경고';
+      if(_lampState){
+        _lampStrMessage = '현재 램프가 켜진 상태입니다.';
+      }else{
+        _lampStrMessage = '현재 램프가 꺼진 상태입니다.';
+      }
+      pushDialog(context, false);
     }else{
-      showChangeDialog(context);
+      if(_lampState){
+        _lampStrTitle = '램프 끄기';
+        _lampStrMessage = '램프를 끄시겠습니까?';
+      }else{
+        _lampStrTitle = '램프 켜기';
+        _lampStrMessage = '램프를 켜시겠습니까?';
+      }
+      pushDialog(context, true);
     }
   }
 
-  // onButton(){
-  //   if(_lampState){
-  //     showErrorDialog(context);
-  //   }else{
-  //     showChangeDialog(context);
-  //   }
-  // }
-
-  // offButton(){
-  //   if(!_lampState){
-  //     showErrorDialog(context);
-  //   }else{
-  //     showChangeDialog(context);
-  //   }
-  // }
-
-  showErrorDialog(context){
+  pushDialog(context, bool change){
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (context) {
-        // 여기에 3항 연산 추가?
-        // 조건 ? 
         return AlertDialog(
           backgroundColor: Colors.white,
-          title: const Text('경고'),
-          content: Text('현재 램프가 $_lampStateStr 상태 입니다.'),
+          title: Text(_lampStrTitle),
+          content: Text(_lampStrMessage),
           actions: [
             Center(
-              child: TextButton(
+              child: change ? Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextButton(
+                    onPressed: () => changeState(),
+                    child: const Text('네'),
+                  ),
+                  TextButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: const Text('아니요'),
+                  ),
+                ],
+              ) : TextButton(
                 onPressed: () => Navigator.of(context).pop(),
                 child: const Text('네, 알겠습니다.'),
-              ),
-            )
-          ],
-        );
-      },
-    );
-  }
-
-  showChangeDialog(context){
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) {
-        return AlertDialog(
-          backgroundColor: Colors.white,
-          title: Text(_lampChangeStrTitle),
-          content: Text(_lampChangeStr),
-          actions: [
-            Center(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  TextButton(
-                    onPressed: () => changeState(),
-                    child: const Text('네'),
-                  ),
-                  TextButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    child: const Text('아니요'),
-                  ),
-                ],
-              ),
-            )
-          ],
-        );
-      },
-    );
-  }
-
-  pushDialog(context){
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) {
-        return AlertDialog(
-          backgroundColor: Colors.white,
-          title: Text(_lampChangeStrTitle),
-          content: Text(_lampChangeStr),
-          actions: [
-            Center(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  TextButton(
-                    onPressed: () => changeState(),
-                    child: const Text('네'),
-                  ),
-                  TextButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    child: const Text('아니요'),
-                  ),
-                ],
               ),
             )
           ],
@@ -175,16 +118,14 @@ class _HomeState extends State<Home> {
   changeState(){
     if(_lampState){
       _lampState = false;
-      _lampStateStr = '꺼진';
       _lampImage = 'images/lamp_off.png';
-      _lampChangeStrTitle = '램프 켜기';
-      _lampChangeStr = '램프를 켜시겠습니까?';
+      _lampStrTitle = '램프 켜기';
+      _lampStrMessage = '램프를 켜시겠습니까?';
     }else{
       _lampState = true;
-      _lampStateStr = '켜진';
       _lampImage = 'images/lamp_on.png';
-      _lampChangeStrTitle = '램프 끄기';
-      _lampChangeStr = '램프를 끄시겠습니까?';
+      _lampStrTitle = '램프 끄기';
+      _lampStrMessage = '램프를 끄시겠습니까?';
     }
     Navigator.of(context).pop();
     setState(() {});
