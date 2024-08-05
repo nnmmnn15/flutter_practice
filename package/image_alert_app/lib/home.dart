@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -8,7 +10,6 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-
   late bool _lampState;
   late String _lampImage;
 
@@ -43,7 +44,7 @@ class _HomeState extends State<Home> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ElevatedButton(
-                  onPressed: () => clickBtn(true),//onButton(),
+                  onPressed: () => clickBtn(true), //onButton(),
                   child: const Text('켜기'),
                 ),
                 ElevatedButton(
@@ -58,76 +59,75 @@ class _HomeState extends State<Home> {
     );
   }
 
-
   // --- function ---
-  clickBtn(bool state){
-    if(state == _lampState){ // 변경 없음
+  clickBtn(bool state) {
+    if (state == _lampState) {
+      // 변경 없음
       _lampStrTitle = '경고';
-      if(_lampState){
+      if (_lampState) {
         _lampStrMessage = '현재 램프가 켜진 상태입니다.';
-      }else{
+      } else {
         _lampStrMessage = '현재 램프가 꺼진 상태입니다.';
       }
-      pushDialog(context, false);
-    }else{
-      if(_lampState){
-        _lampStrTitle = '램프 끄기';
-        _lampStrMessage = '램프를 끄시겠습니까?';
-      }else{
-        _lampStrTitle = '램프 켜기';
-        _lampStrMessage = '램프를 켜시겠습니까?';
-      }
-      pushDialog(context, true);
+      pushDialog();
+    } else {
+      
+      changeActionSheet();
     }
   }
 
-  pushDialog(context, bool change){
-    showDialog(
-      context: context,
+  pushDialog() {
+    Get.defaultDialog(
+      title: _lampStrTitle,
+      middleText: _lampStrMessage,
       barrierDismissible: false,
-      builder: (context) {
-        return AlertDialog(
-          backgroundColor: Colors.white,
-          title: Text(_lampStrTitle),
-          content: Text(_lampStrMessage),
-          actions: [
-            Center(
-              child: change ? Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  TextButton(
-                    onPressed: () => changeState(),
-                    child: const Text('네'),
-                  ),
-                  TextButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    child: const Text('아니요'),
-                  ),
-                ],
-              ) : TextButton(
-                onPressed: () => Navigator.of(context).pop(),
-                child: const Text('네, 알겠습니다.'),
-              ),
-            )
-          ],
-        );
-      },
+      actions: [
+        TextButton(
+          onPressed: () => Get.back(),
+          child: const Text('네, 알겠습니다.'),
+        )
+      ],
     );
   }
 
-  changeState(){
-    if(_lampState){
+  changeState() {
+    if (_lampState) {
       _lampState = false;
       _lampImage = 'images/lamp_off.png';
       _lampStrTitle = '램프 켜기';
       _lampStrMessage = '램프를 켜시겠습니까?';
-    }else{
+    } else {
       _lampState = true;
       _lampImage = 'images/lamp_on.png';
       _lampStrTitle = '램프 끄기';
       _lampStrMessage = '램프를 끄시겠습니까?';
     }
-    Navigator.of(context).pop();
+    Get.back();
     setState(() {});
+  }
+
+  changeActionSheet() {
+    showCupertinoModalPopup(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => CupertinoActionSheet(
+        title: Text(_lampStrTitle),
+        message: Text(_lampStrMessage),
+        actions: [
+          CupertinoActionSheetAction(
+            onPressed: () => changeState(),
+            child: const Text('예'),
+          ),
+          CupertinoActionSheetAction(
+            onPressed: () => Get.back(),
+            child: const Text('아니오'),
+          ),
+        ],
+        cancelButton: CupertinoActionSheetAction(
+          onPressed: () => Get.back(),
+          child: const Text('Cancel'),
+        ),
+      ),
+    );
   }
 }
