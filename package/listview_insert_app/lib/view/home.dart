@@ -86,6 +86,25 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     return Scaffold(
       appBar: AppBar(
         title: const Text('ListView Test'),
+        bottom: TabBar(
+          controller: controller,
+          labelColor: const Color.fromARGB(255, 49, 23, 94),
+          unselectedLabelColor: const Color.fromARGB(255, 120, 73, 200),
+          tabs: const [
+            Tab(
+              icon: Icon(
+                Icons.list,
+                // color: Colors.blue,
+              ),
+            ),
+            Tab(
+              icon: Icon(
+                Icons.add,
+                // color: Colors.blue,
+              ),
+            ),
+          ],
+        ),
       ),
       body: TabBarView(
         physics: const NeverScrollableScrollPhysics(),
@@ -95,23 +114,20 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           SecondPage(list: animalList),
         ],
       ),
-      bottomNavigationBar: TabBar(
-        controller: controller,
-        tabs: const [
-          Tab(
-            icon: Icon(
-              Icons.looks_one,
-              color: Colors.blue,
-            ),
-          ),
-          Tab(
-            icon: Icon(
-              Icons.looks_two,
-              color: Colors.blue,
-            ),
-          ),
-        ]
-      ),
+      // bottomNavigationBar: TabBar(controller: controller, tabs: const [
+      //   Tab(
+      //     icon: Icon(
+      //       Icons.looks_one,
+      //       color: Colors.blue,
+      //     ),
+      //   ),
+      //   Tab(
+      //     icon: Icon(
+      //       Icons.looks_two,
+      //       color: Colors.blue,
+      //     ),
+      //   ),
+      // ]),
     );
   }
 }
