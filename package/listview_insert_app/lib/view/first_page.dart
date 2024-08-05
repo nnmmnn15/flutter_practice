@@ -32,9 +32,12 @@ class _FirstPageState extends State<FirstPage> {
                 child: Card(
                   child: Row(
                     children: [
-                      Image.asset(
-                        widget.list[index].imagePath,
-                        width: 100,
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(12),
+                        child: Image.asset(
+                          widget.list[index].imagePath,
+                          width: 100,
+                        ),
                       ),
                       Text('   ${widget.list[index].animalName}')
                     ],

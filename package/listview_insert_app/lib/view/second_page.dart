@@ -183,6 +183,35 @@ class _SecondPageState extends State<SecondPage> {
             '또 이 동물의 종류는 ${animal.kind} 입니다\n'
             '이 동물은 ${animal.flyExist ? "날 수 있습니다." : "날 수 없습니다."}\n'
             '이 동물을 추가하시겠습니까?',
+        content: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    animal.imagePath,
+                    width: 65,
+                  ),
+                  Text(
+                    imageName,
+                    style: const TextStyle(
+                      fontSize: 10
+                    ),
+                  )
+                ],
+              ),
+            ),
+            Text(
+              '이 동물은 ${animal.animalName} 입니다.\n'
+              '또 이 동물의 종류는 ${animal.kind} 입니다.\n'
+              '이 동물은 ${animal.flyExist ? "날 수 있습니다." : "날 수 없습니다."}\n'
+              '이 동물을 추가하시겠습니까?',
+            ),
+          ],
+        ),
         barrierDismissible: false,
         titleStyle: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         actions: [

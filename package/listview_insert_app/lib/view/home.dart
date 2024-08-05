@@ -93,13 +93,15 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           tabs: const [
             Tab(
               icon: Icon(
-                Icons.list,
+                Icons.menu,
+                size: 30,
                 // color: Colors.blue,
               ),
             ),
             Tab(
               icon: Icon(
                 Icons.add,
+                size: 30,
                 // color: Colors.blue,
               ),
             ),
