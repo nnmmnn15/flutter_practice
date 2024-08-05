@@ -54,9 +54,12 @@ class _HomeState extends State<Home> {
                 fontSize: 20,
               ),
             ),
-            Image.asset(
-              'images/${imageFile[curruntPage]}',
-              width: 370,
+            ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: Image.asset(
+                'images/${imageFile[curruntPage]}',
+                width: 370,
+              ),
             ),
 
 
