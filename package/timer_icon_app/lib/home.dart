@@ -16,11 +16,14 @@ class _HomeState extends State<Home> {
   late List<String> advTextList; // 전체 문구 char리스트
   late bool starSwitch;
   late bool heartSwitch;
-  late String specialChar;  // 특수문자 타입
-  late String topText;  // 상단 텍스트
+  late String specialChar; // 특수문자 타입
+  late String imagePath; // 이미지 경로
+  // late String topText; // 상단 텍스트
   late String bottomText; // 하단 텍스트
 
   late bool textState; // 문구 출력여부
+
+  late int topImageLength;
 
   late List<double> bottomPos;
   late int bottomPosIndex;
@@ -40,10 +43,13 @@ class _HomeState extends State<Home> {
     starSwitch = false;
     heartSwitch = false;
     specialChar = '';
-    topText = '';
+    // topText = '';
     bottomText = '';
-    bottomPos = [0, 100, 200, 300];
+    bottomPos = [0, 80, 160, 240];
     bottomPosIndex = 0;
+
+    topImageLength = 0;
+    imagePath = '';
 
     Timer.periodic(
       const Duration(seconds: 1),
@@ -164,17 +170,18 @@ class _HomeState extends State<Home> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Text(
-                  topText,
-                  style: const TextStyle(
-                    fontSize: 20,
-                  ),
-                ),
-              ],
-            ),
+            topImage(),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.end,
+            //   children: [
+            //     Text(
+            //       topText,
+            //       style: const TextStyle(
+            //         fontSize: 20,
+            //       ),
+            //     ),
+            //   ],
+            // ),
             Text(
               currentText,
               style: const TextStyle(
@@ -182,8 +189,7 @@ class _HomeState extends State<Home> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            Stack(
-            children:[
+            Stack(children: [
               const SizedBox(
                 width: 300,
                 height: 100,
@@ -197,8 +203,7 @@ class _HomeState extends State<Home> {
                   ),
                 ),
               ),
-            ]
-          ),
+            ]),
           ],
         ),
       ),
@@ -206,7 +211,7 @@ class _HomeState extends State<Home> {
   }
 
   textUpdate() {
-    if(textState){
+    if (textState) {
       if (advTextList.isNotEmpty) {
         if (currentIndex >= advTextList.length) {
           currentIndex = 0;
@@ -215,11 +220,14 @@ class _HomeState extends State<Home> {
           currentText += advTextList[currentIndex];
         }
       }
-      if(topText.length < 19){ // 상단바 업데이트
-        topText += specialChar;
+      // if(topText.length < 19){ // 상단바 업데이트
+      //   topText += specialChar;
+      // }
+      if (topImageLength < 13) {
+        topImageLength++;
       }
       bottomPosIndex++;
-      if(bottomPosIndex >= bottomPos.length){
+      if (bottomPosIndex >= bottomPos.length) {
         bottomPosIndex = 0;
       }
     }
@@ -228,19 +236,18 @@ class _HomeState extends State<Home> {
   }
 
   updateAdvertisement() {
-    
-    if(advertisementController.text.isNotEmpty){
+    if (advertisementController.text.isNotEmpty) {
       advTextList = advertisementController.text.split('');
       advertisementController.text = '';
       currentText = '';
       currentIndex = 0;
-      topText = '';
+      // topText = '';
+      topImageLength = 0;
       bottomPosIndex = 0;
       bottomText = specialChar;
       textState = true;
       Navigator.pop(context);
-    }
-    else{
+    } else {
       errorSnackBar();
     }
     setState(() {});
@@ -252,7 +259,8 @@ class _HomeState extends State<Home> {
     advertisementController.text = '';
     currentText = '';
     currentIndex = 0;
-    topText = '';
+    // topText = '';
+    topImageLength = 0;
     bottomPosIndex = 0;
     bottomText = '';
     textState = false;
@@ -264,11 +272,14 @@ class _HomeState extends State<Home> {
     specialCheck();
     if (starSwitch) {
       specialChar = '★';
+      imagePath = 'images/star.png';
     } else if (heartSwitch) {
       specialChar = '♥';
+      imagePath = 'images/heart.png';
     } else {
       specialChar = '';
-      topText = '';
+      topImageLength = 0;
+      // topText = '';
     }
     setState(() {});
   }
@@ -281,13 +292,24 @@ class _HomeState extends State<Home> {
     }
   }
 
-  errorSnackBar(){
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('글자를 입력 하세요.'),
-        duration: Duration(seconds: 2),
-        backgroundColor: Colors.red,
-      )
+  errorSnackBar() {
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+      content: Text('글자를 입력 하세요.'),
+      duration: Duration(seconds: 2),
+      backgroundColor: Colors.red,
+    ));
+  }
+
+  topImage() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        for (int i = 0; i < topImageLength; i++)
+          Image.asset(
+            imagePath,
+            width: 30,
+          )
+      ],
     );
   }
 }
