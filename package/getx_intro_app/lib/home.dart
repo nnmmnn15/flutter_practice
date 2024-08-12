@@ -123,14 +123,15 @@ class _HomeState extends State<Home> {
     Get.bottomSheet(
       Container(
         width: 500,
-        height: 300,
+        height: 150,
         color: Colors.purple[200],
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Text('Text Line1'),
             const Text('Text Line2'),
-            const Text('Text Line3'),
+            Icon(Icons.settings),
+            TextField(),
             TextButton(
               onPressed: () => Get.back(),
               child: const Text('Exit'),
