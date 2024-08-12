@@ -87,7 +87,7 @@ class _InsertListState extends State<InsertList> {
 
   // --- Function ---
   addList() {
-    Message.imagePath = 'images/pencil.png';
+    Message.imagePath = 'images/${imagePath[selectedImage]}';
     Message.workList = textEditingController.text.trim();
     Message.action = true;
   }
