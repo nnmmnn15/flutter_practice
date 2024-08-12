@@ -96,7 +96,7 @@ class _TableListState extends State<TableList> {
                   );
                 },
                 child: Card(
-                  color: index % 2 == 0 ? Colors.green : Colors.yellow,
+                  color: index % 2 == 0 ? Theme.of(context).colorScheme.secondary : Theme.of(context).colorScheme.tertiary,
                   child: Row(
                     children: [
                       Padding(

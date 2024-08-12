@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:listview_todo_app/model/message.dart';
 
@@ -9,14 +10,21 @@ class InsertList extends StatefulWidget {
 }
 
 class _InsertListState extends State<InsertList> {
-
   //Property
   late TextEditingController textEditingController;
+  late List<String> imagePath;
+  late int selectedImage;
 
   @override
   void initState() {
     super.initState();
     textEditingController = TextEditingController();
+    selectedImage = 0;
+    imagePath = [
+      'cart.png',
+      'clock.png',
+      'pencil.png',
+    ];
   }
 
   @override
@@ -27,7 +35,31 @@ class _InsertListState extends State<InsertList> {
       ),
       body: Center(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Image.asset('images/${imagePath[selectedImage]}'),
+                SizedBox(
+                  width: 200,
+                  height: 200,
+                  child: CupertinoPicker(
+                    backgroundColor: Color.fromARGB(58, 104, 58, 183),
+                    looping: true,
+                    itemExtent: 50,
+                    onSelectedItemChanged: (value) {
+                      selectedImage = value;
+                      setState(() {});
+                    },
+                    children: List.generate(
+                      imagePath.length,
+                      (index) => Center(child: Image.asset('images/${imagePath[index]}'),),
+                    ),
+                  ),
+                )
+              ],
+            ),
             TextField(
               controller: textEditingController,
               decoration: const InputDecoration(
@@ -37,16 +69,14 @@ class _InsertListState extends State<InsertList> {
             ),
             ElevatedButton(
               onPressed: () {
-                if(textEditingController.text.trim().isNotEmpty){
+                if (textEditingController.text.trim().isNotEmpty) {
                   addList();
                 }
                 Navigator.pop(context);
               },
               style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10)
-                )
-              ),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10))),
               child: const Text('OK'),
             ),
           ],
@@ -56,7 +86,7 @@ class _InsertListState extends State<InsertList> {
   }
 
   // --- Function ---
-  addList(){
+  addList() {
     Message.imagePath = 'images/pencil.png';
     Message.workList = textEditingController.text.trim();
     Message.action = true;
