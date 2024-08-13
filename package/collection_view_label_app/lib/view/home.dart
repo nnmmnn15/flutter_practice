@@ -1,4 +1,5 @@
 import 'package:collection_view_label_app/view/detail_hero.dart';
+import 'package:collection_view_label_app/view/insert_hero.dart';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
 
@@ -37,6 +38,14 @@ class _HomeState extends State<Home> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('삼국지 인물'),
+        actions: [
+          IconButton(
+            onPressed: () => Get.to(
+              const InsertHero(),
+            )!.then((value) => rebuildData(value.toString()),),
+            icon: const Icon(Icons.add),
+          )
+        ],
       ),
       body: Center(
         child: Padding(
@@ -72,4 +81,12 @@ class _HomeState extends State<Home> {
       ),
     );
   }
-}
+
+  // --- Functions ---
+  rebuildData(String value){
+    if(value.isNotEmpty && value != 'null'){
+      heroList.add(value);
+    }
+    setState(() {});
+  }
+} // End
