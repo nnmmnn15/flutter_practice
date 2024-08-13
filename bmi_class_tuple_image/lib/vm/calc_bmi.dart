@@ -2,9 +2,9 @@ class CalcBMI {
   late double doubleWeight;
   late double doubleHeight;
 
-  CalcBMI(String weight, String height) {
-    doubleWeight = double.parse(weight);
-    doubleHeight = double.parse(height) / 100;
+  CalcBMI(double weight, double height) {
+    doubleWeight = weight;
+    doubleHeight = height / 100;
   }
 
   calcAction() {
