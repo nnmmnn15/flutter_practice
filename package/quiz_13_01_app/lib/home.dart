@@ -12,7 +12,6 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   // Property
-  late int kindChoice; // Segment tool bar
   late MapController mapController;
   late bool canRun;
 
