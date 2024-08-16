@@ -76,6 +76,7 @@ class _HomeState extends State<Home> {
                   ),
                 );
               }),
+              
       floatingActionButton: FloatingActionButton(
         onPressed: () => getCorona19Data(),
         child: const Icon(Icons.download),
