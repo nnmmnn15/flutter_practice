@@ -5,7 +5,6 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart' as latlng;
 import 'package:http/http.dart' as http;
-import 'dart:math' show cos, sqrt, asin;
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -21,6 +20,8 @@ class _HomeState extends State<Home> {
   late MapController mapController;
   late bool canRun;
   late List subwayLocate;
+  double dislat = 0;
+  double dislong = 0;
 
   @override
   void initState() {
@@ -80,7 +81,7 @@ class _HomeState extends State<Home> {
         title: const Center(
           child: Column(
             children: [
-              const Padding(
+              Padding(
                 padding: EdgeInsets.all(8.0),
                 child: Text('GPS & Map'),
               )
@@ -94,7 +95,7 @@ class _HomeState extends State<Home> {
               child: CircularProgressIndicator(),
             ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => calcDistanc(),
+        onPressed: () => calcDis(),
       ),
     );
   }
@@ -109,68 +110,182 @@ class _HomeState extends State<Home> {
           urlTemplate: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
         ),
         MarkerLayer(
-          markers: [
+          markers: List.generate(
+            subwayLocate.length + 1,
+            (index) => index == subwayLocate.length 
+            // 현재 위치
+            ? Marker(
+            width: 80,
+            height: 80,
+            point: latlng.LatLng(latData, longData),
+            child: const Column(
+              children: [
+                SizedBox(
+                  child: Text(
+                    '현재위치',
+                    style: TextStyle(
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+                Icon(
+                  Icons.pin_drop,
+                  size: 50,
+                  color: Colors.red,
+                )
+              ],
+            ),
+          )
+          // 전체 위치
+            : 
             Marker(
               width: 80,
               height: 80,
-              point: latlng.LatLng(latData, longData),
-              child: const Column(
+              point: latlng.LatLng(
+                double.parse(subwayLocate[index]["convY"]),
+                double.parse(subwayLocate[index]["convX"]),
+              ),
+              child: Column(
                 children: [
                   SizedBox(
                     child: Text(
-                      'asd',
-                      style: TextStyle(
+                      '${subwayLocate[index]["stnKrNm"]}역',
+                      style: const TextStyle(
                         fontSize: 10,
                         fontWeight: FontWeight.bold,
                         color: Colors.black,
                       ),
                     ),
                   ),
-                  Icon(
+                  const Icon(
                     Icons.pin_drop,
                     size: 50,
-                    color: Colors.red,
+                    color: Colors.blue,
                   )
                 ],
               ),
-            )
-          ],
+            ),
+          ),
         )
       ],
     );
   }
 
-  calcDistanc() {
-    double shortestPath = double.infinity; // 최단경로
-    int shortIndex = 0;
-    const latlng.Distance distance = latlng.Distance();
+  // MarkerLayer(
+  //         markers: [
+  //           Marker(
+  //             width: 80,
+  //             height: 80,
+  //             point: latlng.LatLng(latData, longData),
+  //             child: const Column(
+  //               children: [
+  //                 SizedBox(
+  //                   child: Text(
+  //                     '현재위치',
+  //                     style: TextStyle(
+  //                       fontSize: 10,
+  //                       fontWeight: FontWeight.bold,
+  //                       color: Colors.black,
+  //                     ),
+  //                   ),
+  //                 ),
+  //                 Icon(
+  //                   Icons.pin_drop,
+  //                   size: 50,
+  //                   color: Colors.red,
+  //                 )
+  //               ],
+  //             ),
+  //           ),
+  //           Marker(
+  //             width: 80,
+  //             height: 80,
+  //             point: latlng.LatLng(dislat, dislong),
+  //             child: const Column(
+  //               children: [
+  //                 SizedBox(
+  //                   child: Text(
+  //                     '최단거리',
+  //                     style: TextStyle(
+  //                       fontSize: 10,
+  //                       fontWeight: FontWeight.bold,
+  //                       color: Colors.black,
+  //                     ),
+  //                   ),
+  //                 ),
+  //                 Icon(
+  //                   Icons.pin_drop,
+  //                   size: 50,
+  //                   color: Colors.blue,
+  //                 )
+  //               ],
+  //             ),
+  //           ),
+  //         ],
+  //       )
 
+  // calcDistanc(){
+  //   double shortestPath = 1000000000; // 최단경로
+  //   int shortIndex = 0;
+  //   const latlng.Distance distance = latlng.Distance();
+  //   double dis = 0;
+
+  //   for (int i = 0; i < subwayLocate.length; i++) {
+  //     print(shortestPath);
+  //     // 거리 계산
+  //     final double meterDistance = distance.as(
+  //       latlng.LengthUnit.Meter,
+  //       latlng.LatLng(latData, longData),
+  //       latlng.LatLng(
+  //         double.parse(subwayLocate[i]["convX"]),
+  //         double.parse(subwayLocate[i]["convY"]),
+  //       ),
+  //     );
+  //     if (shortestPath > meterDistance) {
+  //       shortestPath = meterDistance;
+  //       dis = meterDistance;
+  //       dislong = double.parse(subwayLocate[i]["convX"]);
+  //       dislat = double.parse(subwayLocate[i]["convY"]);
+  //       print('$dislat , $dislong');
+  //       shortIndex = i;
+  //     }
+  //   }
+  //   setState(() {});
+  //   print('$dislat , $dislong');
+  //   print(
+  //       "${subwayLocate[shortIndex]["stnKrNm"]}역, ${subwayLocate[shortIndex]["lineNm"]} 입니다, $dis");
+  // }
+
+  // // 거리 계산
+  // calcA(lt1, lng1, lt2, lng2) {
+  //   var p = 0.017453292519943295;
+  //   var c = cos;
+  //   var a = 0.5 -
+  //       c((lt2 - lt1) * p) / 2 +
+  //       c(lt1 * p) * c(lt2 * p) * (1 - c((lng2 - lng1) * p)) / 2;
+  //   return 12742 * asin(sqrt(a));
+  // }
+
+  calcDis() async {
+    int shortIndex = 0;
+    double shortestMeter = 1;
     for (int i = 0; i < subwayLocate.length; i++) {
       // 거리 계산
-      final double meterDistance = distance.as(
-        latlng.LengthUnit.Meter,
-        latlng.LatLng(latData, longData),
-        latlng.LatLng(
-          double.parse(subwayLocate[i]["convX"]),
-          double.parse(subwayLocate[i]["convY"]),
-        ),
-      );
-      if(shortestPath < meterDistance){
-        shortestPath = meterDistance;
+      dislong = double.parse(subwayLocate[i]["convX"]);
+      dislat = double.parse(subwayLocate[i]["convY"]);
+      double distanceX = (dislong - longData).abs();
+      double distanceY = (dislat - latData).abs();
+      double distance = distanceX + distanceY;
+      if (distance < shortestMeter) {
+        shortestMeter = distance;
         shortIndex = i;
       }
     }
 
-    print("${subwayLocate[shortIndex]["stnKrNm"]}역, ${subwayLocate[shortIndex]["lineNm"]} 입니다");
-  }
-
-  // 거리 계산
-  calcA(lt1, lng1, lt2, lng2) {
-    var p = 0.017453292519943295;
-    var c = cos;
-    var a = 0.5 -
-        c((lt2 - lt1) * p) / 2 +
-        c(lt1 * p) * c(lt2 * p) * (1 - c((lng2 - lng1) * p)) / 2;
-    return 12742 * asin(sqrt(a));
+    dislong = double.parse(subwayLocate[shortIndex]["convX"]);
+    dislat = double.parse(subwayLocate[shortIndex]["convY"]);
+    return shortIndex;
   }
 }
