@@ -69,6 +69,8 @@ class DatabaseHandler {
     int result = 0;
     // db
     final Database db = await initializeDB();
+    // insert
+    // 1번째 데이터 = 1, 2번째 데이터 = 2 , 에러 = 0
     result = await db.rawDelete(
       """
         delete from students where code = ?
