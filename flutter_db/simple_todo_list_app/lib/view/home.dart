@@ -60,7 +60,6 @@ class _HomeState extends State<Home> {
                     ),
                     child: GestureDetector(
                       onLongPress: () async{
-                        print(snapshot.data![index].taskCheck);
                         await handler.checkTodoList(snapshot.data![index].taskId, snapshot.data![index].taskCheck);
                         setState(() {});
                       },

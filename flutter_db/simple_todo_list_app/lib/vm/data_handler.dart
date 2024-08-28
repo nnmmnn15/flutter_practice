@@ -30,10 +30,10 @@ class DataHandler{
         select * from todo;
       """
     );
-    print(queryResult);
-    dynamic a = queryResult.map((e) => Todo.fromMap(e)).toList();
-    Todo s = a[0];
-    print("???${s.taskCheck}");
+    // print(queryResult);
+    // dynamic a = queryResult.map((e) => Todo.fromMap(e)).toList();
+    // Todo s = a[0];
+    // print("???${s.taskCheck}");
     return queryResult.map((e) => Todo.fromMap(e)).toList();
   }
 
@@ -64,9 +64,7 @@ class DataHandler{
 
   checkTodoList(int? id, int? check) async{
     final Database db = await initializeDatabase();
-    print("a:$check");
     int checkTask = check == 1 ? 0 : 1;
-    print("b:$checkTask");
     await db.rawInsert(
       """
         update todo set taskcheck = ? where taskid = ?
