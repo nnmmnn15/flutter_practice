@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "927146017166",
+    "project_id": "students-e60d4",
+    "storage_bucket": "students-e60d4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:927146017166:android:85ad079e4b2e47bed3a4df",
+        "android_client_info": {
+          "package_name": "com.tj.firebaselist"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAL5vOVbJGW17Tw370HencOvOiRnit-VtM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
