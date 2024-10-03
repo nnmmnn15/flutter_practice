@@ -15,6 +15,12 @@ class Home extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Memo'),
+        actions: [
+          IconButton(
+            onPressed: () => memoController.test(),
+            icon: const Icon(Icons.add),
+          ),
+        ],
       ),
       body: Column(
         children: [

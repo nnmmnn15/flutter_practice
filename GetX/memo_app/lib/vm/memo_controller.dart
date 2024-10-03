@@ -10,7 +10,7 @@ class MemoController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    _memos.orderBy('title', descending: true).snapshots().listen(
+    _memos.snapshots().listen(
       (event) {
         memos.value = event.docs
             .map(
@@ -19,6 +19,10 @@ class MemoController extends GetxController {
             .toList();
       },
     );
+  }
+
+  test() {
+    print(_memos.doc());
   }
 
   addMemo(String title, String content) {
